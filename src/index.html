@@ -1,564 +1,499 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Kalkulator dywidendy - oblicz dywidendę na udział dla każdego wspólnika w spółce" />
-    <meta
-      name="keywords"
-      content="kalkulator dywidendy, dywidenda, udziały, wspólnicy, spółka" />
-    <link href="./output.css" rel="stylesheet" />
-    <title>Kalkulator Dywidendy - Oblicz dywidendę na udział</title>
-  </head>
-  <body>
-    <a href="#main-content"> Przejdź do głównej treści </a>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kalkulator dywidendy - oblicz dywidendę na udział dla każdego wspólnika w spółce">
+  <meta name="keywords" content="kalkulator dywidendy, dywidenda, udziały, wspólnicy, spółka">
+  <link href="./output.css" rel="stylesheet">
+  <title>Kalkulator Dywidendy</title>
+</head>
+<body class="min-h-screen font-sans antialiased">
+  <!-- Skip link -->
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 btn btn-primary z-50">
+    Przejdź do głównej treści
+  </a>
 
-    <div>
-      <header>
-        <h1>Kalkulator Dywidendy</h1>
-        <p>
-          Profesjonalne narzędzie do obliczania dywidendy na udział dla każdego
-          wspólnika w spółce
-        </p>
-      </header>
-
-      <main id="main-content">
-        <section aria-labelledby="config-heading">
-          <div>
-            <div>
-              <h2 id="config-heading">Konfiguracja kalkulatora</h2>
-            </div>
-
-            <div>
-              <div>
-                <label for="privilegedBonus">
-                  Bonus udziałów uprzywilejowanych (%)
-                </label>
-                <div>
-                  <input
-                    type="number"
-                    id="privilegedBonus"
-                    placeholder="25"
-                    value="25"
-                    min="0"
-                    step="0.1"
-                    aria-describedby="privilegedBonus-help" />
-                  <span aria-hidden="true">%</span>
-                </div>
-                <p id="privilegedBonus-help">
-                  Każdy udział uprzywilejowany = 1 + (bonus/100) udziału
-                  nieuprzywilejowanego
-                </p>
-              </div>
-
-              <div>
-                <label for="totalDividend">
-                  Kwota dywidendy do wypłaty (PLN)
-                </label>
-                <div>
-                  <input
-                    type="text"
-                    id="totalDividend"
-                    placeholder="100 000,00"
-                    value="100 000,00"
-                    aria-describedby="totalDividend-help" />
-                  <span aria-hidden="true">zł</span>
-                </div>
-                <p id="totalDividend-help">
-                  Całkowita kwota dywidendy do rozdzielenia między wspólników
-                </p>
-              </div>
-            </div>
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="py-8 sm:py-12 animate-in">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="icon-box icon-box-teal">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
           </div>
-        </section>
-
-        <section aria-labelledby="partners-heading">
-          <div>
-            <div>
-              <div>
-                <h2 id="partners-heading">Wspólnicy</h2>
-              </div>
-              <button id="addPartner" aria-label="Dodaj nowego wspólnika">
-                Dodaj wspólnika
-              </button>
-            </div>
-
-            <div
-              id="partnersContainer"
-              role="group"
-              aria-labelledby="partners-heading">
-              <!-- Partners will be added here dynamically -->
-            </div>
-          </div>
-        </section>
-
-        <section aria-labelledby="results-heading">
-          <div>
-            <div>
-              <div>
-                <h2 id="results-heading">Wyniki obliczeń</h2>
-              </div>
-              <button id="copyResults" aria-label="Kopiuj wyniki do schowka">
-                Kopiuj wyniki
-              </button>
-            </div>
-
-            <div>
-              <div>
-                <div>Razem efektywnych udziałów</div>
-                <div id="totalEffectiveShares" aria-live="polite">0</div>
-              </div>
-
-              <div>
-                <div>Dywidenda na udział uprzywilejowany</div>
-                <div id="dividendPerPrivileged" aria-live="polite">0,00 zł</div>
-              </div>
-
-              <div>
-                <div>Dywidenda na udział nieuprzywilejowany</div>
-                <div id="dividendPerRegular" aria-live="polite">0,00 zł</div>
-              </div>
-
-              <div>
-                <div>Łączna liczba wspólników</div>
-                <div id="totalPartners" aria-live="polite">0</div>
-              </div>
-            </div>
-
-            <div>
-              <h3>Wypłaty dla wspólników</h3>
-              <div
-                id="partnersResults"
-                role="region"
-                aria-label="Wyniki wypłat dla wspólników"
-                aria-live="polite">
-                <!-- Results will be displayed here -->
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-
-    <script>
-      let partnerCount = 0;
-      let partners = [];
-
-      // Initialize app
-      document.addEventListener("DOMContentLoaded", function () {
-        addPartner();
-        calculate();
-        setupInputAutoSelect();
-        setupCopyResults();
-        setupInputFormatting();
-      });
-
-      // Event listeners
-      document
-        .getElementById("addPartner")
-        .addEventListener("click", addPartner);
-      document
-        .getElementById("privilegedBonus")
-        .addEventListener("input", calculate);
-      document
-        .getElementById("totalDividend")
-        .addEventListener("input", calculate);
-
-      // Utility functions for Polish currency formatting
-      function formatPolishCurrency(amount) {
-        return (
-          amount.toLocaleString("pl-PL", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }) + " zł"
-        );
-      }
-
-      function formatPolishNumber(number) {
-        return number.toLocaleString("pl-PL", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        });
-      }
-
-      function formatPolishInteger(number) {
-        return number.toLocaleString("pl-PL", {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        });
-      }
-
-      function parsePolishNumber(formattedValue) {
-        return (
-          parseFloat(formattedValue.replace(/\s/g, "").replace(",", ".")) || 0
-        );
-      }
-
-      function formatInputValue(input, value) {
-        const numValue = parseFloat(value) || 0;
-        input.value = formatPolishNumber(numValue);
-      }
-
-      // Input enhancements
-      function setupInputAutoSelect() {
-        document
-          .querySelectorAll('input[type="number"], input[type="text"]')
-          .forEach((input) => {
-            input.addEventListener("focus", function () {
-              this.select();
-            });
-          });
-      }
-
-      function setupInputFormatting() {
-        const totalDividendInput = document.getElementById("totalDividend");
-
-        totalDividendInput.addEventListener("blur", function () {
-          const value = parsePolishNumber(this.value);
-          if (value > 0) {
-            formatInputValue(this, value);
-          }
-        });
-
-        totalDividendInput.addEventListener("focus", function () {
-          const value = parsePolishNumber(this.value);
-          if (value > 0) {
-            this.value = value.toString();
-          }
-        });
-      }
-
-      function setupCopyResults() {
-        document
-          .getElementById("copyResults")
-          .addEventListener("click", copyResultsToClipboard);
-      }
-
-      function addAutoSelectToInput(input) {
-        input.addEventListener("focus", function () {
-          this.select();
-        });
-      }
-
-      // Partner management
-      function addPartner() {
-        partnerCount++;
-        const partnerId = `partner_${partnerCount}`;
-
-        const partnerDiv = document.createElement("div");
-        partnerDiv.id = partnerId;
-        partnerDiv.setAttribute("role", "group");
-        partnerDiv.setAttribute("aria-label", `Wspólnik ${partnerCount}`);
-
-        partnerDiv.innerHTML = `
-        <div>
-          <h3>Wspólnik ${partnerCount}</h3>
-          ${
-            partnerCount > 1
-              ? `
-            <button 
-              onclick="removePartner('${partnerId}')"
-              aria-label="Usuń wspólnika ${partnerCount}"
-            >
-              Usuń
-            </button>
-          `
-              : ""
-          }
+          <span class="badge badge-teal">Narzędzie online</span>
         </div>
+        <h1 class="text-3xl sm:text-4xl font-bold text-stone-900 tracking-tight">
+          Kalkulator Dywidendy
+        </h1>
+        <p class="mt-2 text-stone-500 text-base sm:text-lg max-w-xl">
+          Rozdziel dywidendę między wspólników uwzględniając udziały uprzywilejowane i nieuprzywilejowane.
+        </p>
+      </div>
+    </header>
+
+    <main id="main" class="pb-16">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6 space-y-6">
         
-        <div>
-          <div>
-            <label for="${partnerId}_name">
-              Nazwa wspólnika
-            </label>
+        <!-- Configuration -->
+        <section class="card animate-in delay-1" aria-labelledby="config-title">
+          <div class="p-5 sm:p-6 border-b border-stone-100">
+            <div class="flex items-center gap-3">
+              <div class="icon-box icon-box-teal">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                </svg>
+              </div>
+              <h2 id="config-title" class="text-lg font-semibold text-stone-900">Konfiguracja</h2>
+            </div>
+          </div>
+          
+          <div class="p-5 sm:p-6">
+            <div class="grid gap-6 sm:grid-cols-2">
+              <div class="form-group">
+                <label for="totalDividend" class="label">Kwota dywidendy do wypłaty</label>
+                <div class="input-with-unit">
+                  <input 
+                    type="text" 
+                    id="totalDividend" 
+                    class="input" 
+                    placeholder="100 000,00" 
+                    value="100 000,00"
+                    aria-describedby="totalDividend-hint"
+                  >
+                  <span class="input-unit">PLN</span>
+                </div>
+                <p id="totalDividend-hint" class="label-hint">Całkowita kwota do rozdzielenia</p>
+              </div>
+
+              <div class="form-group">
+                <label for="privilegedBonus" class="label">Bonus udziałów uprzywilejowanych</label>
+                <div class="input-with-unit">
+                  <input 
+                    type="number" 
+                    id="privilegedBonus" 
+                    class="input" 
+                    placeholder="25" 
+                    value="25" 
+                    min="0" 
+                    step="0.1"
+                    aria-describedby="privilegedBonus-hint"
+                  >
+                  <span class="input-unit">%</span>
+                </div>
+                <p id="privilegedBonus-hint" class="label-hint">Mnożnik: 1 udział uprzyw. = <span id="multiplierPreview" class="number-highlight">1,25</span> udziału</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Partners -->
+        <section class="card animate-in delay-2" aria-labelledby="partners-title">
+          <div class="p-5 sm:p-6 border-b border-stone-100">
+            <div class="flex items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <div class="icon-box icon-box-teal">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 id="partners-title" class="text-lg font-semibold text-stone-900">Wspólnicy</h2>
+                  <p class="text-sm text-stone-500 hidden sm:block">Dodaj wspólników i określ ich udziały</p>
+                </div>
+              </div>
+              <button 
+                id="addPartner" 
+                class="btn btn-primary"
+                aria-label="Dodaj nowego wspólnika"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                <span class="hidden sm:inline">Dodaj wspólnika</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="p-5 sm:p-6">
+            <div id="partnersContainer" class="space-y-4" role="list" aria-label="Lista wspólników">
+              <!-- Partners added dynamically -->
+            </div>
+            
+            <div id="emptyPartners" class="text-center py-12 hidden">
+              <svg class="mx-auto w-12 h-12 text-stone-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <p class="text-stone-500 font-medium">Brak wspólników</p>
+              <p class="text-stone-400 text-sm mt-1">Kliknij przycisk powyżej, aby dodać pierwszego wspólnika</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Results -->
+        <section class="card-highlight animate-in delay-3 grid-pattern" aria-labelledby="results-title">
+          <div class="p-5 sm:p-6 border-b border-white/10">
+            <div class="flex items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <div class="icon-box icon-box-dark">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                <h2 id="results-title" class="text-lg font-semibold text-white">Wyniki</h2>
+              </div>
+              <button 
+                id="copyResults" 
+                class="btn btn-dark"
+                aria-label="Kopiuj wyniki do schowka"
+              >
+                <svg id="copyIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                <span id="copyText">Kopiuj</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Summary Stats -->
+          <div class="p-5 sm:p-6 border-b border-white/10">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              <div class="stat-block">
+                <span class="stat-label">Wspólników</span>
+                <span class="stat-value-lg" id="totalPartners" aria-live="polite">0</span>
+              </div>
+              <div class="stat-block">
+                <span class="stat-label">Efekt. udziałów</span>
+                <span class="stat-value-lg" id="totalEffectiveShares" aria-live="polite">0</span>
+              </div>
+              <div class="stat-block">
+                <span class="stat-label">Na udz. uprzyw.</span>
+                <span class="stat-value" id="dividendPerPrivileged" aria-live="polite">0,00 zł</span>
+              </div>
+              <div class="stat-block">
+                <span class="stat-label">Na udz. zwykły</span>
+                <span class="stat-value" id="dividendPerRegular" aria-live="polite">0,00 zł</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Partner Results -->
+          <div class="p-5 sm:p-6">
+            <h3 class="text-sm font-semibold text-white/60 uppercase tracking-wider mb-4">Wypłaty</h3>
+            <div id="partnersResults" class="space-y-3" role="list" aria-label="Wyniki dla wspólników" aria-live="polite">
+              <!-- Results dynamically inserted -->
+            </div>
+            
+            <div id="noResults" class="empty-state hidden">
+              <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+              </svg>
+              <p class="font-medium">Brak wyników</p>
+              <p class="text-sm mt-1 opacity-70">Dodaj wspólników, aby zobaczyć obliczenia</p>
+            </div>
+          </div>
+        </section>
+        
+      </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="py-6 text-center text-stone-400 text-sm animate-in delay-4">
+      <p>Kalkulator dywidendy &middot; Narzędzie do rozliczeń wspólników</p>
+    </footer>
+  </div>
+
+  <script>
+    let partnerCount = 0;
+    let partners = [];
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      addPartner();
+      calculate();
+      setupEventListeners();
+    });
+
+    function setupEventListeners() {
+      document.getElementById('addPartner').addEventListener('click', addPartner);
+      document.getElementById('privilegedBonus').addEventListener('input', handleBonusChange);
+      document.getElementById('totalDividend').addEventListener('input', calculate);
+      document.getElementById('copyResults').addEventListener('click', copyResultsToClipboard);
+      
+      // Format dividend on blur
+      const dividendInput = document.getElementById('totalDividend');
+      dividendInput.addEventListener('blur', () => {
+        const value = parsePolishNumber(dividendInput.value);
+        if (value > 0) dividendInput.value = formatPolishNumber(value);
+      });
+      dividendInput.addEventListener('focus', () => {
+        const value = parsePolishNumber(dividendInput.value);
+        if (value > 0) dividendInput.value = value.toString();
+      });
+      
+      // Auto-select on focus
+      document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('focus', function() { this.select(); });
+      });
+    }
+
+    function handleBonusChange() {
+      const bonus = parseFloat(document.getElementById('privilegedBonus').value) || 0;
+      const multiplier = 1 + (bonus / 100);
+      document.getElementById('multiplierPreview').textContent = formatPolishNumber(multiplier);
+      calculate();
+    }
+
+    // Formatting utilities
+    function formatPolishCurrency(amount) {
+      return amount.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' zł';
+    }
+
+    function formatPolishNumber(number) {
+      return number.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatPolishInteger(number) {
+      return number.toLocaleString('pl-PL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    function parsePolishNumber(value) {
+      return parseFloat(value.replace(/\s/g, '').replace(',', '.')) || 0;
+    }
+
+    // Partner management
+    function addPartner() {
+      partnerCount++;
+      const id = `partner_${partnerCount}`;
+      
+      const div = document.createElement('div');
+      div.className = 'partner-card animate-in';
+      div.id = id;
+      div.setAttribute('role', 'listitem');
+      
+      div.innerHTML = `
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div class="flex-1 min-w-0">
             <input 
               type="text" 
-              id="${partnerId}_name"
-              placeholder="Jan Kowalski" 
-              onchange="updatePartnerName('${partnerId}', this.value)"
-              aria-required="true"
+              id="${id}_name"
+              class="text-base font-semibold text-stone-900 bg-transparent border-0 p-0 w-full focus:ring-0 focus:outline-none placeholder:text-stone-400"
+              placeholder="Imię i nazwisko wspólnika"
+              onchange="updatePartnerName('${id}', this.value)"
             >
           </div>
-          
-          <div>
-            <label for="${partnerId}_privileged">
-              Udziały uprzywilejowane
-            </label>
+          ${partnerCount > 1 ? `
+            <button 
+              class="btn btn-ghost text-stone-400 hover:text-rose-600"
+              onclick="removePartner('${id}')"
+              aria-label="Usuń wspólnika"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          ` : ''}
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div class="form-group">
+            <label for="${id}_privileged" class="label">Uprzywilejowane</label>
             <input 
               type="number" 
-              id="${partnerId}_privileged"
-              class="privileged-shares" 
+              id="${id}_privileged"
+              class="input privileged-shares" 
               placeholder="0" 
               value="0" 
               min="0" 
               step="1"
               onchange="calculate()"
-              aria-describedby="${partnerId}_privileged_help"
             >
-            <p id="${partnerId}_privileged_help">
-              Liczba udziałów uprzywilejowanych dla tego wspólnika
-            </p>
           </div>
           
-          <div>
-            <label for="${partnerId}_regular">
-              Udziały nieuprzywilejowane
-            </label>
+          <div class="form-group">
+            <label for="${id}_regular" class="label">Nieuprzywilejowane</label>
             <input 
               type="number" 
-              id="${partnerId}_regular"
-              class="regular-shares" 
+              id="${id}_regular"
+              class="input regular-shares" 
               placeholder="0" 
               value="0" 
               min="0" 
               step="1"
               onchange="calculate()"
-              aria-describedby="${partnerId}_regular_help"
             >
-            <p id="${partnerId}_regular_help">
-              Liczba udziałów nieuprzywilejowanych dla tego wspólnika
-            </p>
           </div>
         </div>
       `;
+      
+      document.getElementById('partnersContainer').appendChild(div);
+      document.getElementById('emptyPartners').classList.add('hidden');
+      
+      // Add auto-select
+      div.querySelectorAll('input').forEach(input => {
+        input.addEventListener('focus', function() { this.select(); });
+      });
+      
+      partners.push({
+        id,
+        name: `Wspólnik ${partnerCount}`,
+        privilegedShares: 0,
+        regularShares: 0
+      });
+      
+      document.getElementById(`${id}_name`).focus();
+      calculate();
+    }
 
-        document.getElementById("partnersContainer").appendChild(partnerDiv);
-
-        // Add auto-select to new inputs
-        partnerDiv.querySelectorAll("input").forEach(addAutoSelectToInput);
-
-        partners.push({
-          id: partnerId,
-          name: `Wspólnik ${partnerCount}`,
-          privilegedShares: 0,
-          regularShares: 0,
-        });
-
-        // Focus on name input for new partner
-        document.getElementById(`${partnerId}_name`).focus();
-
-        calculate();
-      }
-
-      function removePartner(partnerId) {
-        const partnerElement = document.getElementById(partnerId);
-        if (partnerElement) {
-          partnerElement.remove();
-          partners = partners.filter((p) => p.id !== partnerId);
-          calculate();
-
-          // Announce removal for screen readers
-          const announcement = document.createElement("div");
-          announcement.setAttribute("aria-live", "polite");
-          announcement.textContent = "Wspólnik został usunięty";
-          document.body.appendChild(announcement);
-          setTimeout(() => document.body.removeChild(announcement), 1000);
-        }
-      }
-
-      function updatePartnerName(partnerId, name) {
-        const partner = partners.find((p) => p.id === partnerId);
-        if (partner) {
-          partner.name = name || `Wspólnik ${partnerId.split("_")[1]}`;
-        }
-        calculate();
-      }
-
-      // Copy results functionality
-      function copyResultsToClipboard() {
-        const privilegedBonus =
-          parseFloat(document.getElementById("privilegedBonus").value) || 0;
-        const totalDividend = parsePolishNumber(
-          document.getElementById("totalDividend").value
-        );
-
-        const privilegedMultiplier = 1 + privilegedBonus / 100;
-        let totalEffectiveShares = 0;
-
-        partners.forEach((partner) => {
-          partner.effectiveShares =
-            partner.privilegedShares * privilegedMultiplier +
-            partner.regularShares;
-          totalEffectiveShares += partner.effectiveShares;
-        });
-
-        const dividendPerEffectiveShare =
-          totalEffectiveShares > 0 ? totalDividend / totalEffectiveShares : 0;
-        const dividendPerPrivileged =
-          dividendPerEffectiveShare * privilegedMultiplier;
-        const dividendPerRegular = dividendPerEffectiveShare;
-
-        let resultsText = `WYNIKI KALKULACJI DYWIDENDY\n`;
-        resultsText += `================================\n\n`;
-        resultsText += `KONFIGURACJA:\n`;
-        resultsText += `• Bonus udziałów uprzywilejowanych: ${privilegedBonus}%\n`;
-        resultsText += `• Kwota dywidendy do wypłaty: ${formatPolishCurrency(
-          totalDividend
-        )}\n\n`;
-        resultsText += `PODSUMOWANIE:\n`;
-        resultsText += `• Razem efektywnych udziałów: ${formatPolishInteger(
-          totalEffectiveShares
-        )}\n`;
-        resultsText += `• Dywidenda na udział uprzywilejowany: ${formatPolishCurrency(
-          dividendPerPrivileged
-        )}\n`;
-        resultsText += `• Dywidenda na udział nieuprzywilejowany: ${formatPolishCurrency(
-          dividendPerRegular
-        )}\n`;
-        resultsText += `• Łączna liczba wspólników: ${partners.length}\n\n`;
-        resultsText += `WYPŁATY DLA WSPÓLNIKÓW:\n`;
-        resultsText += `================================\n`;
-
-        partners.forEach((partner, index) => {
-          const privilegedPayout =
-            partner.privilegedShares * dividendPerPrivileged;
-          const regularPayout = partner.regularShares * dividendPerRegular;
-          const totalPayout = privilegedPayout + regularPayout;
-
-          resultsText += `\n${index + 1}. ${partner.name}\n`;
-          resultsText += `   • Udziały uprzywilejowane: ${
-            partner.privilegedShares
-          } × ${formatPolishCurrency(
-            dividendPerPrivileged
-          )} = ${formatPolishCurrency(privilegedPayout)}\n`;
-          resultsText += `   • Udziały nieuprzywilejowane: ${
-            partner.regularShares
-          } × ${formatPolishCurrency(
-            dividendPerRegular
-          )} = ${formatPolishCurrency(regularPayout)}\n`;
-          resultsText += `   • Efektywne udziały: ${formatPolishInteger(
-            partner.effectiveShares
-          )}\n`;
-          resultsText += `   • ŁĄCZNA WYPŁATA: ${formatPolishCurrency(
-            totalPayout
-          )}\n`;
-        });
-
-        resultsText += `\n================================\n`;
-        resultsText += `Wygenerowano: ${new Date().toLocaleString("pl-PL")}\n`;
-
-        navigator.clipboard
-          .writeText(resultsText)
-          .then(() => {
-            showCopySuccess();
-          })
-          .catch((err) => {
-            console.error("Błąd kopiowania:", err);
-            alert("Nie udało się skopiować wyników do schowka.");
-          });
-      }
-
-      function showCopySuccess() {
-        const button = document.getElementById("copyResults");
-        const originalText = button.innerHTML;
-
-        button.innerHTML = "Skopiowano!";
-
+    function removePartner(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateX(-10px)';
         setTimeout(() => {
-          button.innerHTML = originalText;
-        }, 2000);
-      }
-
-      // Main calculation function
-      function calculate() {
-        const privilegedBonus =
-          parseFloat(document.getElementById("privilegedBonus").value) || 0;
-        const totalDividendInput = document.getElementById("totalDividend");
-        const totalDividend = parsePolishNumber(totalDividendInput.value);
-
-        // Update partners data
-        partners.forEach((partner) => {
-          const partnerDiv = document.getElementById(partner.id);
-          if (partnerDiv) {
-            const privilegedInput =
-              partnerDiv.querySelector(".privileged-shares");
-            const regularInput = partnerDiv.querySelector(".regular-shares");
-
-            partner.privilegedShares = parseInt(privilegedInput.value) || 0;
-            partner.regularShares = parseInt(regularInput.value) || 0;
+          el.remove();
+          partners = partners.filter(p => p.id !== id);
+          calculate();
+          if (partners.length === 0) {
+            document.getElementById('emptyPartners').classList.remove('hidden');
           }
-        });
-
-        // Calculate effective shares
-        const privilegedMultiplier = 1 + privilegedBonus / 100;
-        let totalEffectiveShares = 0;
-
-        partners.forEach((partner) => {
-          partner.effectiveShares =
-            partner.privilegedShares * privilegedMultiplier +
-            partner.regularShares;
-          totalEffectiveShares += partner.effectiveShares;
-        });
-
-        // Calculate dividends per share
-        const dividendPerEffectiveShare =
-          totalEffectiveShares > 0 ? totalDividend / totalEffectiveShares : 0;
-        const dividendPerPrivileged =
-          dividendPerEffectiveShare * privilegedMultiplier;
-        const dividendPerRegular = dividendPerEffectiveShare;
-
-        // Update summary results
-        document.getElementById("totalEffectiveShares").textContent =
-          formatPolishInteger(totalEffectiveShares);
-        document.getElementById("dividendPerPrivileged").textContent =
-          formatPolishCurrency(dividendPerPrivileged);
-        document.getElementById("dividendPerRegular").textContent =
-          formatPolishCurrency(dividendPerRegular);
-        document.getElementById("totalPartners").textContent = partners.length;
-
-        // Generate partner results
-        const resultsContainer = document.getElementById("partnersResults");
-        resultsContainer.innerHTML = "";
-
-        if (partners.length === 0) {
-          resultsContainer.innerHTML = `
-          <div>
-            <p>Brak wspólników do wyświetlenia</p>
-            <p>Dodaj wspólników aby zobaczyć wyniki obliczeń</p>
-          </div>
-        `;
-          return;
-        }
-
-        partners.forEach((partner) => {
-          const privilegedPayout =
-            partner.privilegedShares * dividendPerPrivileged;
-          const regularPayout = partner.regularShares * dividendPerRegular;
-          const totalPayout = privilegedPayout + regularPayout;
-
-          const resultDiv = document.createElement("div");
-          resultDiv.innerHTML = `
-          <div>
-            <h4>${partner.name}</h4>
-            <div>${formatPolishCurrency(totalPayout)}</div>
-          </div>
-          <div>
-            <div>
-              <div>Uprzywilejowane</div>
-              <div>${partner.privilegedShares} × ${formatPolishCurrency(
-            dividendPerPrivileged
-          )}</div>
-              <div>${formatPolishCurrency(privilegedPayout)}</div>
-            </div>
-            <div>
-              <div>Nieuprzywilejowane</div>
-              <div>${partner.regularShares} × ${formatPolishCurrency(
-            dividendPerRegular
-          )}</div>
-              <div>${formatPolishCurrency(regularPayout)}</div>
-            </div>
-            <div>
-              <div>Efektywne udziały</div>
-              <div>${formatPolishInteger(partner.effectiveShares)}</div>
-            </div>
-          </div>
-        `;
-          resultsContainer.appendChild(resultDiv);
-        });
+        }, 150);
       }
-    </script>
-  </body>
+    }
+
+    function updatePartnerName(id, name) {
+      const partner = partners.find(p => p.id === id);
+      if (partner) partner.name = name || `Wspólnik ${id.split('_')[1]}`;
+      calculate();
+    }
+
+    // Calculation
+    function calculate() {
+      const privilegedBonus = parseFloat(document.getElementById('privilegedBonus').value) || 0;
+      const totalDividend = parsePolishNumber(document.getElementById('totalDividend').value);
+      
+      // Update partner data
+      partners.forEach(p => {
+        const div = document.getElementById(p.id);
+        if (div) {
+          p.privilegedShares = parseInt(div.querySelector('.privileged-shares').value) || 0;
+          p.regularShares = parseInt(div.querySelector('.regular-shares').value) || 0;
+        }
+      });
+
+      const multiplier = 1 + (privilegedBonus / 100);
+      let totalEffective = 0;
+      
+      partners.forEach(p => {
+        p.effectiveShares = (p.privilegedShares * multiplier) + p.regularShares;
+        totalEffective += p.effectiveShares;
+      });
+
+      const perEffective = totalEffective > 0 ? totalDividend / totalEffective : 0;
+      const perPrivileged = perEffective * multiplier;
+      const perRegular = perEffective;
+
+      // Update stats
+      document.getElementById('totalPartners').textContent = partners.length;
+      document.getElementById('totalEffectiveShares').textContent = formatPolishInteger(totalEffective);
+      document.getElementById('dividendPerPrivileged').textContent = formatPolishCurrency(perPrivileged);
+      document.getElementById('dividendPerRegular').textContent = formatPolishCurrency(perRegular);
+
+      // Generate results
+      const container = document.getElementById('partnersResults');
+      const noResults = document.getElementById('noResults');
+      container.innerHTML = '';
+
+      if (partners.length === 0) {
+        noResults.classList.remove('hidden');
+        return;
+      }
+
+      noResults.classList.add('hidden');
+
+      partners.forEach(p => {
+        const privPayout = p.privilegedShares * perPrivileged;
+        const regPayout = p.regularShares * perRegular;
+        const total = privPayout + regPayout;
+
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.setAttribute('role', 'listitem');
+        card.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <h4 class="font-semibold text-white truncate">${p.name}</h4>
+              <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-white/60">
+                <span>${p.privilegedShares} uprz. &times; ${formatPolishCurrency(perPrivileged)}</span>
+                <span>${p.regularShares} zwykł. &times; ${formatPolishCurrency(perRegular)}</span>
+              </div>
+            </div>
+            <div class="money money-lg text-white sm:text-right">${formatPolishCurrency(total)}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Copy
+    function copyResultsToClipboard() {
+      const privilegedBonus = parseFloat(document.getElementById('privilegedBonus').value) || 0;
+      const totalDividend = parsePolishNumber(document.getElementById('totalDividend').value);
+      
+      const multiplier = 1 + (privilegedBonus / 100);
+      let totalEffective = 0;
+      
+      partners.forEach(p => {
+        p.effectiveShares = (p.privilegedShares * multiplier) + p.regularShares;
+        totalEffective += p.effectiveShares;
+      });
+
+      const perEffective = totalEffective > 0 ? totalDividend / totalEffective : 0;
+      const perPrivileged = perEffective * multiplier;
+      const perRegular = perEffective;
+      
+      let text = `KALKULATOR DYWIDENDY\n`;
+      text += `${'='.repeat(40)}\n\n`;
+      text += `Kwota dywidendy: ${formatPolishCurrency(totalDividend)}\n`;
+      text += `Bonus uprzywilejowanych: ${privilegedBonus}%\n`;
+      text += `Efektywne udziały: ${formatPolishInteger(totalEffective)}\n`;
+      text += `Na udział uprzywilejowany: ${formatPolishCurrency(perPrivileged)}\n`;
+      text += `Na udział zwykły: ${formatPolishCurrency(perRegular)}\n\n`;
+      text += `WYPŁATY\n`;
+      text += `${'-'.repeat(40)}\n`;
+      
+      partners.forEach((p, i) => {
+        const total = (p.privilegedShares * perPrivileged) + (p.regularShares * perRegular);
+        text += `\n${i + 1}. ${p.name}\n`;
+        text += `   Uprzywilejowane: ${p.privilegedShares} × ${formatPolishCurrency(perPrivileged)}\n`;
+        text += `   Nieuprzywilejowane: ${p.regularShares} × ${formatPolishCurrency(perRegular)}\n`;
+        text += `   SUMA: ${formatPolishCurrency(total)}\n`;
+      });
+      
+      text += `\n${'='.repeat(40)}\n`;
+      text += `Wygenerowano: ${new Date().toLocaleString('pl-PL')}\n`;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyResults');
+        const icon = document.getElementById('copyIcon');
+        const textEl = document.getElementById('copyText');
+        
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
+        textEl.textContent = 'Skopiowano!';
+        btn.classList.add('!bg-emerald-600', '!border-emerald-600');
+        
+        setTimeout(() => {
+          icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>';
+          textEl.textContent = 'Kopiuj';
+          btn.classList.remove('!bg-emerald-600', '!border-emerald-600');
+        }, 2000);
+      }).catch(() => {
+        alert('Nie udało się skopiować wyników.');
+      });
+    }
+  </script>
+</body>
 </html>
